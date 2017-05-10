@@ -15,7 +15,7 @@ var connection = mysql.createConnection({
 
 function bamazonify(){ 
 inquirer.prompt([{
-    name: "ID",
+    name: "position",
     type: "input",
     message: "What is the Item ID?",
   },
@@ -25,8 +25,17 @@ inquirer.prompt([{
     message: "How Many?",
   }]
   ).then(function(answer) {
-    console.log(answer.ID);
-    console.log(answer.Quantity);
+
+
+    // console.log(answer.ID);
+    // console.log(answer.Quantity);
+
+     var query = "SELECT position, stock_quantity FROM stock WHERE ?";
+    connection.query(query, { position: answer.position }, function(err, res) {
+console.log(res) 
+});
+
+
     }
   )};
 bamazonify();
