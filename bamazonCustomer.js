@@ -25,33 +25,28 @@ function bamazonify() {
     }]).then(function(answer) {
 
 
-        // console.log(answer.ID);
-        // console.log(answer.Quantity);
 
-        var query = "SELECT position, stock_quantity FROM stock WHERE ?";
+
+        var query = "SELECT position, price, stock_quantity FROM stock WHERE ?";
         connection.query(query, { position: answer.position }, function(err, res) {
-            // console.log(res[0].stock_quantity);
+
             var stock_init = res[0].stock_quantity;
-            // console.log("initial stock quantity: " + stock_init);
+
+            var mult = answer.Quantity;
+            var price = mult * res[0].price;
             var stock_new = stock_init - answer.Quantity;
             if (stock_init < answer.Quantity) {
                 console.log("Insufficient quantity!");
             } else {
 
-                
-                // var query = "UPDATE stock_quantity SET ? WHERE ?";
-                // connection.query(query, [{ stock_quantity: stock_new }, { position: answer.position }], function(err, res) {
-
-                //     console.log("Order placed!");
-
-                // });
 
                 connection.query("UPDATE stock SET ? WHERE ?", [{
                     stock_quantity: stock_new
                 }, {
                     position: answer.position
                 }], function(err, res) {
-                	console.log("order placed!")
+                    console.log("Order placed!")
+                    console.log("You spent $" + price + "!")
                 });
 
 
